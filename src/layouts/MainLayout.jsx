@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
-import Home from '../components/Home';
 
-const MainLayout = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+const MainLayout = ({ children }) => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -18,7 +17,7 @@ const MainLayout = () => {
         isSidebarOpen ? 'md:ml-64' : 'md:ml-16'
       }`}>
         <div className="h-[100%] w-[100%] max-w-10xl p-4 sm:p-6 lg:p-8 xl:p-12">
-          <Home />
+          {children}
         </div>
       </main>
     </div>

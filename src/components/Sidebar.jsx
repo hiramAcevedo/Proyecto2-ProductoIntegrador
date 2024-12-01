@@ -6,41 +6,57 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
   ArrowDownTrayIcon,
-  AcademicCapIcon
+  AcademicCapIcon,
+  HomeIcon
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const MenuItem = ({ icon: Icon, text, isOpen, hasSubmenu, isSubmenuOpen, onClick, children }) => {
-  const showText = isOpen || isSubmenuOpen;
-  
+const MenuItem = ({ icon: Icon, text, isOpen, hasSubmenu, isSubmenuOpen, onClick, to, children }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isActive = location.pathname === to;
+
   return (
-    <div className="w-full">
-      <button 
-        onClick={onClick}
-        className={`w-full flex items-center px-4 py-2.5 text-sm bg-transparent hover:bg-white/10 transition-all duration-200 whitespace-nowrap ${
-          isSubmenuOpen ? 'text-blue-400' : 'text-white'
+    <div className="space-y-1">
+      <div
+        className={`w-full flex items-center rounded transition-colors ${
+          !isOpen ? 'justify-center' : ''
+        } ${
+          isActive
+            ? 'bg-blue-500/10 text-blue-400'
+            : 'text-gray-300 hover:bg-gray-800 hover:text-gray-200'
         }`}
       >
-        <Icon className="h-5 w-5 min-w-[1.25rem]" />
-        {showText && (
-          <>
-            <span className="ml-3 truncate flex-1 text-left">{text}</span>
-            {hasSubmenu && isOpen && (
-              <div className="ml-auto">
-                {isSubmenuOpen ? (
-                  <ChevronDownIcon className="h-4 w-4" />
-                ) : (
-                  <ChevronRightIcon className="h-4 w-4" />
-                )}
-              </div>
-            )}
-          </>
+        <div 
+          onClick={() => to && navigate(to)}
+          className={`flex items-center flex-grow px-3 py-2 ${to ? 'cursor-pointer' : ''}`}
+        >
+          <Icon className={`w-6 h-6 ${isActive ? 'text-blue-400' : 'text-gray-400'}`} />
+          {isOpen && (
+            <span className={`ml-3 ${isActive ? 'text-blue-400' : 'text-gray-300'}`}>
+              {text}
+            </span>
+          )}
+        </div>
+        {hasSubmenu && isOpen && (
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              onClick();
+            }}
+            className="pr-3 cursor-pointer"
+          >
+            <ChevronDownIcon
+              className={`w-4 h-4 transform transition-transform text-gray-400 ${
+                isSubmenuOpen ? 'rotate-180' : ''
+              }`}
+            />
+          </div>
         )}
-      </button>
-      {hasSubmenu && isSubmenuOpen && (
-        <div className={`transition-all duration-300 ${
-          isOpen ? 'ml-4 pl-4 border-l border-blue-400/30' : 'pl-0'
-        }`}>
+      </div>
+      {hasSubmenu && isOpen && isSubmenuOpen && (
+        <div className="pl-6 space-y-1">
           {children}
         </div>
       )}
@@ -50,223 +66,193 @@ const MenuItem = ({ icon: Icon, text, isOpen, hasSubmenu, isSubmenuOpen, onClick
 
 const Sidebar = ({ isOpen }) => {
   const [openMenus, setOpenMenus] = useState({
-    actividades: false,
     proyectos: false,
+    actividades: false,
     documentacion: false,
     github: false,
     unidad1: false,
     unidad2: false,
     unidad3: false,
-    unidad4: false
+    unidad4: false,
+    ritmonet: false,
+    natare: false
   });
 
-  const toggleMenu = (menuKey) => {
+  const toggleMenu = (menuName) => {
     setOpenMenus(prev => ({
       ...prev,
-      [menuKey]: !prev[menuKey]
+      [menuName]: !prev[menuName]
     }));
   };
 
   const unidades = [
     {
-      full: "Unidad 1",
-      short: "U1",
-      submenu: [
-        { 
-          name: 'Actividad 2',
-          filename: 'U1Act2.pdf',
-          isDownload: true
-        },
-        { 
-          name: 'Actividad Integradora',
-          filename: 'U1ActInt.pdf',
-          isDownload: true
-        }
+      id: 'unidad1',
+      nombre: 'Unidad 1',
+      ruta: '/actividades-realizadas/unidad1',
+      actividades: [
+        { nombre: 'Actividad 1', archivo: 'U1Act1.pdf' },
+        { nombre: 'Actividad 2', archivo: 'U1Act2.pdf' },
+        { nombre: 'Actividad Integradora', archivo: 'U1ActInt.pdf' }
       ]
     },
     {
-      full: "Unidad 2",
-      short: "U2",
-      submenu: [
-        { 
-          name: 'Actividad 1',
-          filename: 'U2Act1.pdf',
-          isDownload: true
-        },
-        { 
-          name: 'Actividad 2',
-          filename: 'U2Act2.pdf',
-          isDownload: true
-        },
-        { 
-          name: 'Actividad Integradora',
-          filename: 'U2ActInt.pdf',
-          isDownload: true
-        }
+      id: 'unidad2',
+      nombre: 'Unidad 2',
+      ruta: '/actividades-realizadas/unidad2',
+      actividades: [
+        { nombre: 'Actividad 1', archivo: 'U2Act1.pdf' },
+        { nombre: 'Actividad 2', archivo: 'U2Act2.pdf' },
+        { nombre: 'Actividad Integradora', archivo: 'U2ActInt.pdf' }
       ]
     },
     {
-      full: "Unidad 3",
-      short: "U3",
-      submenu: [
-        { 
-          name: 'Actividad 1',
-          filename: 'U3Act1.pdf',
-          isDownload: true
-        },
-        { 
-          name: 'Actividad 2',
-          filename: 'U3Act2.pdf',
-          isDownload: true
-        },
-        { 
-          name: 'Actividad 3',
-          filename: 'U3Act3.pdf',
-          isDownload: true
-        },
-        { 
-          name: 'Actividad Integradora',
-          filename: 'U3ActInt.pdf',
-          isDownload: true
-        }
+      id: 'unidad3',
+      nombre: 'Unidad 3',
+      ruta: '/actividades-realizadas/unidad3',
+      actividades: [
+        { nombre: 'Actividad 1', archivo: 'U3Act1.pdf' },
+        { nombre: 'Actividad 2', archivo: 'U3Act2.pdf' },
+        { nombre: 'Actividad 3', archivo: 'U3Act3.pdf' },
+        { nombre: 'Actividad Integradora', archivo: 'U3ActInt.pdf' }
       ]
     },
     {
-      full: "Unidad 4",
-      short: "U4",
-      submenu: [
-        { 
-          name: 'Actividad 1',
-          filename: 'U4Act1.pdf',
-          isDownload: true
-        },
-        { 
-          name: 'Actividad 2',
-          filename: 'U4Act2.pdf',
-          isDownload: true
-        }
+      id: 'unidad4',
+      nombre: 'Unidad 4',
+      ruta: '/actividades-realizadas/unidad4',
+      actividades: [
+        { nombre: 'Actividad 1', archivo: 'U4Act1.pdf' },
+        { nombre: 'Actividad 2', archivo: 'U4Act2.pdf' }
       ]
     }
   ];
 
-  const proyectos = [
-    { name: "Ritmonet", submenu: ["Código fuente"] },
-    { name: "Natare", submenu: ["Código fuente"] }
-  ];
-
-  const documentacion = [
-    { full: "Trello", short: "TR" },
-    { full: "Jira", short: "JR" },
-    { full: "Reporte de modificaciones", short: "RM" }
-  ];
-
-  const github = [
-    { full: "Ritmonet", short: "RT" },
-    { full: "Natare", short: "NT" }
-  ];
-
-  const renderSubmenuButton = (item, index) => {
-    if (item.isDownload) {
-      return (
-        <a
-          key={index}
-          href={`/downloads/${item.filename}`}
-          download
-          className={`w-full text-left px-3 py-2 text-sm text-blue-300/70 hover:text-blue-200 hover:bg-blue-500/10 rounded transition-colors flex items-center ${
-            !isOpen ? 'justify-center' : ''
+  const renderUnidadSubmenu = (unidad) => (
+    <div key={unidad.id} className="space-y-1">
+      <button
+        onClick={() => toggleMenu(unidad.id)}
+        className="w-full flex items-center px-3 py-2 text-sm text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded transition-colors"
+      >
+        {unidad.nombre}
+        <ChevronDownIcon
+          className={`w-4 h-4 ml-auto transform transition-transform ${
+            openMenus[unidad.id] ? 'rotate-180' : ''
           }`}
-        >
-          <ArrowDownTrayIcon className="w-4 h-4 mr-2" />
-          {item.name}
-        </a>
-      );
-    }
-
-    return (
-      <button
-        key={index}
-        className={`w-full text-left px-3 py-2 text-sm text-blue-300/70 hover:text-blue-200 hover:bg-blue-500/10 rounded transition-colors ${
-          !isOpen ? 'flex justify-center' : ''
-        }`}
-      >
-        {isOpen ? item.full || item : item.short || item.substring(0, 2)}
+        />
       </button>
-    );
-  };
-
-  const renderProyectoSubmenu = (proyecto, index) => (
-    <div key={index} className="space-y-1">
-      <button
-        className={`w-full text-left px-3 py-2 text-sm text-blue-300 hover:text-blue-200 hover:bg-blue-500/10 rounded transition-colors ${
-          !isOpen ? 'flex justify-center' : ''
-        }`}
-      >
-        {isOpen ? proyecto.name : proyecto.name.substring(0, 2)}
-      </button>
-      {isOpen && openMenus.proyectos && (
-        <div className="ml-4">
-          {proyecto.submenu.map((subitem, subIndex) => (
-            <button
-              key={`${index}-${subIndex}`}
-              className="w-full text-left px-3 py-1.5 text-sm text-blue-300/70 hover:text-blue-200 hover:bg-blue-500/10 rounded transition-colors"
+      {openMenus[unidad.id] && (
+        <div className="pl-4 space-y-1">
+          {unidad.actividades.map((actividad, index) => (
+            <a
+              key={index}
+              href={`/downloads/${actividad.archivo}`}
+              download
+              className="block py-1 px-3 text-sm text-blue-300/70 hover:text-blue-200 hover:bg-blue-500/10 rounded transition-colors flex items-center"
             >
-              {subitem}
-            </button>
+              <ArrowDownTrayIcon className="w-4 h-4 mr-2" />
+              {actividad.nombre}
+            </a>
           ))}
         </div>
       )}
     </div>
   );
 
-  const renderUnidadButton = (unidad, index) => (
-    <div key={index} className="space-y-1">
-      <button
-        onClick={() => toggleMenu(`unidad${index + 1}`)}
-        className={`w-full text-left px-3 py-2 text-sm text-blue-300 hover:text-blue-200 hover:bg-blue-500/10 rounded transition-colors flex items-center ${
-          !isOpen ? 'justify-center' : ''
-        }`}
+  const proyectos = [
+    {
+      id: 'ritmonet',
+      nombre: 'Ritmonet',
+      ruta: '/proyectos/ritmonet',
+      submenu: [
+        { nombre: 'Código fuente', ruta: '/proyectos/ritmonet/codigo' }
+      ]
+    },
+    {
+      id: 'natare',
+      nombre: 'Natare',
+      ruta: '/proyectos/natare',
+      submenu: [
+        { nombre: 'Código fuente', ruta: '/proyectos/natare/codigo' }
+      ]
+    }
+  ];
+
+  const renderProyectoSubmenu = (proyecto) => (
+    <div key={proyecto.id} className="space-y-1">
+      <Link
+        to={proyecto.ruta}
+        className="w-full flex items-center px-3 py-2 text-sm text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded transition-colors group"
       >
-        {isOpen ? (
-          <>
-            {unidad.full}
-            <ChevronDownIcon
-              className={`w-4 h-4 ml-auto transform transition-transform ${
-                openMenus[`unidad${index + 1}`] ? 'rotate-180' : ''
-              }`}
-            />
-          </>
-        ) : (
-          unidad.short
-        )}
-      </button>
-      {isOpen && openMenus[`unidad${index + 1}`] && unidad.submenu && (
-        <div className="ml-4 space-y-1">
-          {unidad.submenu.map((subitem, subIndex) => 
-            renderSubmenuButton(subitem, `${index}-${subIndex}`)
-          )}
+        <span>{proyecto.nombre}</span>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMenu(proyecto.id);
+          }}
+          className="ml-auto p-1 hover:bg-gray-700 rounded"
+        >
+          <ChevronDownIcon
+            className={`w-4 h-4 transform transition-transform ${
+              openMenus[proyecto.id] ? 'rotate-180' : ''
+            }`}
+          />
+        </button>
+      </Link>
+      {openMenus[proyecto.id] && (
+        <div className="pl-4 space-y-1">
+          {proyecto.submenu.map((item, index) => (
+            <Link
+              key={index}
+              to={item.ruta}
+              className="block py-1 px-3 text-sm text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded transition-colors"
+            >
+              {item.nombre}
+            </Link>
+          ))}
         </div>
       )}
     </div>
   );
 
+  const documentacion = [
+    { nombre: 'Trello', link: 'https://trello.com/b/your-board' },
+    { nombre: 'Jira', link: 'https://your-domain.atlassian.net' },
+    { nombre: 'Reporte de modificaciones', archivo: 'reporte-modificaciones.pdf' }
+  ];
+
+  const github = [
+    { nombre: 'Ritmonet', link: 'https://github.com/your-org/ritmonet' },
+    { nombre: 'Natare', link: 'https://github.com/your-org/natare' }
+  ];
+
   return (
     <aside className={`fixed top-0 left-0 h-screen bg-gray-800 dark:bg-gray-950 transition-all duration-300 pt-14 flex flex-col ${
       isOpen ? 'w-64' : 'w-16'
     }`}>
-      <nav className="flex-1 flex flex-col gap-1 p-2 overflow-y-auto">
+      <nav className="flex-1 space-y-1 px-2">
+        <MenuItem 
+          icon={HomeIcon}
+          text="Inicio"
+          isOpen={isOpen}
+          to="/"
+        />
+
         <MenuItem 
           icon={ClipboardDocumentListIcon} 
           text="Actividades realizadas" 
           isOpen={isOpen}
+          to="/actividades-realizadas"
           hasSubmenu={true}
           isSubmenuOpen={openMenus.actividades}
-          onClick={() => toggleMenu('actividades')}
+          onClick={() => {
+            toggleMenu('actividades');
+          }}
         >
-          {isOpen && openMenus.actividades && (
-            <div className="space-y-1">
-              {unidades.map((unidad, index) => 
-                renderUnidadButton(unidad, index)
-              )}
+          {openMenus.actividades && (
+            <div className="pl-6 space-y-1">
+              {unidades.map(unidad => renderUnidadSubmenu(unidad))}
             </div>
           )}
         </MenuItem>
@@ -279,8 +265,10 @@ const Sidebar = ({ isOpen }) => {
           isSubmenuOpen={openMenus.proyectos}
           onClick={() => toggleMenu('proyectos')}
         >
-          {proyectos.map((proyecto, index) => 
-            renderProyectoSubmenu(proyecto, index)
+          {openMenus.proyectos && (
+            <div className="pl-6 space-y-1">
+              {proyectos.map(proyecto => renderProyectoSubmenu(proyecto))}
+            </div>
           )}
         </MenuItem>
 
@@ -292,8 +280,32 @@ const Sidebar = ({ isOpen }) => {
           isSubmenuOpen={openMenus.documentacion}
           onClick={() => toggleMenu('documentacion')}
         >
-          {documentacion.map((doc, index) => 
-            renderSubmenuButton(doc, index)
+          {openMenus.documentacion && (
+            <div className="pl-6 space-y-1">
+              {documentacion.map((item, index) => 
+                item.archivo ? (
+                  <a
+                    key={index}
+                    href={`/downloads/${item.archivo}`}
+                    download
+                    className="block py-2 text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded text-sm flex items-center"
+                  >
+                    <ArrowDownTrayIcon className="w-4 h-4 mr-2" />
+                    {item.nombre}
+                  </a>
+                ) : (
+                  <a
+                    key={index}
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block py-2 text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded text-sm"
+                  >
+                    {item.nombre}
+                  </a>
+                )
+              )}
+            </div>
           )}
         </MenuItem>
 
@@ -305,22 +317,23 @@ const Sidebar = ({ isOpen }) => {
           isSubmenuOpen={openMenus.github}
           onClick={() => toggleMenu('github')}
         >
-          {github.map((repo, index) => 
-            renderSubmenuButton(repo, index)
+          {openMenus.github && (
+            <div className="pl-6 space-y-1">
+              {github.map((item, index) => (
+                <a
+                  key={index}
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block py-2 text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded text-sm"
+                >
+                  {item.nombre}
+                </a>
+              ))}
+            </div>
           )}
         </MenuItem>
       </nav>
-      
-      <div className={`p-4 border-t border-white/5 ${isOpen ? 'text-center' : ''}`}>
-        <div className="flex items-center justify-center gap-2 text-white/80">
-          <AcademicCapIcon className="h-5 w-5" />
-          {isOpen && (
-            <div className="text-xs">
-              Licenciatura en Desarrollo de Sistemas Web
-            </div>
-          )}
-        </div>
-      </div>
     </aside>
   );
 };
