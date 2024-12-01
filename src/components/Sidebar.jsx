@@ -334,6 +334,17 @@ const Sidebar = ({ isOpen }) => {
           )}
         </MenuItem>
       </nav>
+      <footer className="p-4 border-t border-gray-700">
+        <div className={`flex items-center ${!isOpen ? 'justify-center' : ''}`}>
+          <AcademicCapIcon className="w-8 h-8 text-gray-400" />
+          {isOpen && (
+            <div className="ml-3">
+              <p className="text-sm font-medium text-gray-300">Desarrollo de Sistemas Web</p>
+              <p className="text-xs text-gray-500">Agosto - Diciembre 2024</p>
+            </div>
+          )}
+        </div>
+      </footer>
     </aside>
   );
 };
