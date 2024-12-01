@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 
@@ -8,6 +8,21 @@ const MainLayout = ({ children }) => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (window.innerWidth < 768 && isSidebarOpen) {
+        const sidebar = document.getElementById('sidebar');
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        if (sidebar && !sidebar.contains(e.target) && hamburgerBtn && !hamburgerBtn.contains(e.target)) {
+          setIsSidebarOpen(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isSidebarOpen]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">

@@ -7,9 +7,10 @@ import {
   ChevronRightIcon,
   ArrowDownTrayIcon,
   AcademicCapIcon,
-  HomeIcon
+  HomeIcon,
+  LinkIcon
 } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const MenuItem = ({ icon: Icon, text, isOpen, hasSubmenu, isSubmenuOpen, onClick, to, children }) => {
@@ -165,7 +166,10 @@ const Sidebar = ({ isOpen }) => {
       nombre: 'Ritmonet',
       ruta: '/proyectos/ritmonet',
       submenu: [
-        { nombre: 'Código fuente', ruta: '/proyectos/ritmonet/codigo' }
+        { 
+          nombre: 'Descargar código', 
+          archivo: 'ritmonetdeploy-main.zip'
+        }
       ]
     },
     {
@@ -173,7 +177,10 @@ const Sidebar = ({ isOpen }) => {
       nombre: 'Natare',
       ruta: '/proyectos/natare',
       submenu: [
-        { nombre: 'Código fuente', ruta: '/proyectos/natare/codigo' }
+        { 
+          nombre: 'Descargar código', 
+          archivo: 'natare-main.zip'
+        }
       ]
     }
   ];
@@ -201,15 +208,18 @@ const Sidebar = ({ isOpen }) => {
         </button>
       </Link>
       {openMenus[proyecto.id] && (
-        <div className="pl-4 space-y-1">
+        <div className="pl-6 space-y-1">
           {proyecto.submenu.map((item, index) => (
-            <Link
-              key={index}
-              to={item.ruta}
-              className="block py-1 px-3 text-xs sm:text-sm md:text-base text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded transition-colors"
-            >
-              {item.nombre}
-            </Link>
+            <div key={index}>
+              <a
+                href={`/downloads/${item.archivo}`}
+                download
+                className="block py-1 px-3 text-xs sm:text-sm md:text-base text-blue-300/70 hover:text-gray-200 hover:bg-gray-800 rounded transition-colors flex items-center"
+              >
+                <ArrowDownTrayIcon className="w-4 h-4 mr-2" />
+                {item.nombre}
+              </a>
+            </div>
           ))}
         </div>
       )}
@@ -228,9 +238,10 @@ const Sidebar = ({ isOpen }) => {
   ];
 
   return (
-    <aside className={`fixed top-0 left-0 h-screen bg-gray-800 dark:bg-gray-950 transition-all duration-300 pt-14 flex flex-col ${
-      isOpen ? 'w-64' : 'w-16'
-    }`}>
+    <aside className={`fixed top-0 left-0 h-screen bg-gray-800 dark:bg-gray-950 transition-all duration-300 pt-14 flex flex-col 
+      ${isOpen ? 'w-64' : 'w-16'}
+      ${window.innerWidth < 768 && !isOpen ? '-translate-x-full md:translate-x-0' : 'translate-x-0'}
+    `}>
       <nav className="flex-1 space-y-1 px-2 overflow-y-auto">
         <MenuItem 
           icon={HomeIcon}
@@ -288,7 +299,7 @@ const Sidebar = ({ isOpen }) => {
                     key={index}
                     href={`/downloads/${item.archivo}`}
                     download
-                    className="block py-2 text-xs sm:text-sm md:text-base text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded text-sm flex items-center"
+                    className="block py-2 text-xs sm:text-sm md:text-base text-blue-300/70 hover:text-gray-200 hover:bg-gray-800 rounded transition-colors flex items-center"
                   >
                     <ArrowDownTrayIcon className="w-4 h-4 mr-2" />
                     {item.nombre}
@@ -325,9 +336,10 @@ const Sidebar = ({ isOpen }) => {
                   href={item.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block py-2 text-xs sm:text-sm md:text-base text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded text-sm"
+                  className="block py-2 text-xs sm:text-sm md:text-base text-blue-300/70 hover:text-gray-200 hover:bg-gray-800 rounded transition-colors flex items-center"
                 >
-                  {item.nombre}
+                  <LinkIcon className="w-4 h-4 mr-2" />
+                  Ver en Github
                 </a>
               ))}
             </div>
