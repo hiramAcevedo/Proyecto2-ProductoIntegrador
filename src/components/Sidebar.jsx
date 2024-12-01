@@ -233,8 +233,14 @@ const Sidebar = ({ isOpen }) => {
   ];
 
   const github = [
-    { nombre: 'Ritmonet', link: 'https://github.com/hiramAcevedo/ritmonetdeploy' },
-    { nombre: 'Natare', link: 'https://github.com/LuisM-code-star/natare' }
+    {
+      link: 'https://github.com/hiramAcevedo/ritmonetdeploy',
+      nombre: 'Ritmonet'
+    },
+    {
+      link: 'https://github.com/LuisM-code-star/natare',
+      nombre: 'Natare'
+    }
   ];
 
   return (
@@ -339,7 +345,7 @@ const Sidebar = ({ isOpen }) => {
                   className="block py-2 text-xs sm:text-sm md:text-base text-blue-300/70 hover:text-gray-200 hover:bg-gray-800 rounded transition-colors flex items-center"
                 >
                   <LinkIcon className="w-4 h-4 mr-2" />
-                  Ver en Github
+                  {item.nombre}
                 </a>
               ))}
             </div>
