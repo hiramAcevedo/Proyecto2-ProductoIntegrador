@@ -217,14 +217,14 @@ const Sidebar = ({ isOpen }) => {
   );
 
   const documentacion = [
-    { nombre: 'Trello', link: 'https://trello.com/b/your-board' },
-    { nombre: 'Jira', link: 'https://your-domain.atlassian.net' },
+    { nombre: 'Trello', link: 'https://trello.com/b/gOAVAeon/ritmonet-historias-de-usuario-x-funci%C3%B3n-priorizaci%C3%B3n-u2' },
+    { nombre: 'Jira', link: 'https://hiramwoki1996.atlassian.net/jira/core/projects/S2R/board' },
     { nombre: 'Reporte de modificaciones', archivo: 'reporte-modificaciones.pdf' }
   ];
 
   const github = [
-    { nombre: 'Ritmonet', link: 'https://github.com/your-org/ritmonet' },
-    { nombre: 'Natare', link: 'https://github.com/your-org/natare' }
+    { nombre: 'Ritmonet', link: 'https://github.com/hiramAcevedo/ritmonetdeploy' },
+    { nombre: 'Natare', link: 'https://github.com/LuisM-code-star/natare' }
   ];
 
   return (
