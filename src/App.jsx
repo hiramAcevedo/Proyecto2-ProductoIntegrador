@@ -3,6 +3,8 @@ import { ThemeProvider } from './context/ThemeContext';
 import MainLayout from './layouts/MainLayout';
 import Home from './components/Home';
 import Actividades from './components/Actividades';
+import Ritmonet from './components/proyectos/Ritmonet';
+import Natare from './components/proyectos/Natare';
 
 function App() {
   return (
@@ -14,10 +16,8 @@ function App() {
             <Route path="/actividades-realizadas" element={<Actividades />} />
             <Route path="/actividades-realizadas/unidad:id" element={<Actividades />} />
             <Route path="/proyectos" element={<div>Proyectos</div>} />
-            <Route path="/proyectos/ritmonet" element={<div>Proyecto Ritmonet</div>} />
-            <Route path="/proyectos/ritmonet/codigo" element={<div>Código fuente de Ritmonet</div>} />
-            <Route path="/proyectos/natare" element={<div>Proyecto Natare</div>} />
-            <Route path="/proyectos/natare/codigo" element={<div>Código fuente de Natare</div>} />
+            <Route path="/proyectos/ritmonet" element={<Ritmonet />} />
+            <Route path="/proyectos/natare" element={<Natare />} />
             <Route path="/documentacion" element={<div>Documentación</div>} />
             <Route path="/documentacion/trello" element={<div>Trello</div>} />
             <Route path="/documentacion/jira" element={<div>Jira</div>} />

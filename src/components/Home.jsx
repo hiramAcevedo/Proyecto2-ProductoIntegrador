@@ -113,9 +113,14 @@ const Home = () => {
                       </p>
                     </div>
                     <div className="mt-4">
-                      <button className="px-4 py-2 bg-purple-600 text-white text-sm rounded-md hover:bg-purple-700 transition-colors w-full">
+                      <a 
+                        href="https://luism-code-star.github.io/natare/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block px-4 py-2 bg-purple-600 text-white text-sm rounded-md hover:bg-purple-700 transition-colors w-full text-center"
+                      >
                         Ver Proyecto
-                      </button>
+                      </a>
                     </div>
                   </div>
                 </div>
