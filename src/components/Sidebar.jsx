@@ -1,11 +1,12 @@
 import { 
-  AcademicCapIcon,
   ClipboardDocumentListIcon,
   FolderIcon,
   BookOpenIcon,
   CodeBracketIcon,
   ChevronDownIcon,
-  ChevronRightIcon
+  ChevronRightIcon,
+  ArrowDownTrayIcon,
+  AcademicCapIcon
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
@@ -52,7 +53,11 @@ const Sidebar = ({ isOpen }) => {
     actividades: false,
     proyectos: false,
     documentacion: false,
-    github: false
+    github: false,
+    unidad1: false,
+    unidad2: false,
+    unidad3: false,
+    unidad4: false
   });
 
   const toggleMenu = (menuKey) => {
@@ -63,11 +68,85 @@ const Sidebar = ({ isOpen }) => {
   };
 
   const unidades = [
-    { full: "Unidad 1", short: "U1" },
-    { full: "Unidad 2", short: "U2" },
-    { full: "Unidad 3", short: "U3" },
-    { full: "Unidad 4", short: "U4" },
-    { full: "Unidad 5", short: "U5" }
+    {
+      full: "Unidad 1",
+      short: "U1",
+      submenu: [
+        { 
+          name: 'Actividad 2',
+          filename: 'U1Act2.pdf',
+          isDownload: true
+        },
+        { 
+          name: 'Actividad Integradora',
+          filename: 'U1ActInt.pdf',
+          isDownload: true
+        }
+      ]
+    },
+    {
+      full: "Unidad 2",
+      short: "U2",
+      submenu: [
+        { 
+          name: 'Actividad 1',
+          filename: 'U2Act1.pdf',
+          isDownload: true
+        },
+        { 
+          name: 'Actividad 2',
+          filename: 'U2Act2.pdf',
+          isDownload: true
+        },
+        { 
+          name: 'Actividad Integradora',
+          filename: 'U2ActInt.pdf',
+          isDownload: true
+        }
+      ]
+    },
+    {
+      full: "Unidad 3",
+      short: "U3",
+      submenu: [
+        { 
+          name: 'Actividad 1',
+          filename: 'U3Act1.pdf',
+          isDownload: true
+        },
+        { 
+          name: 'Actividad 2',
+          filename: 'U3Act2.pdf',
+          isDownload: true
+        },
+        { 
+          name: 'Actividad 3',
+          filename: 'U3Act3.pdf',
+          isDownload: true
+        },
+        { 
+          name: 'Actividad Integradora',
+          filename: 'U3ActInt.pdf',
+          isDownload: true
+        }
+      ]
+    },
+    {
+      full: "Unidad 4",
+      short: "U4",
+      submenu: [
+        { 
+          name: 'Actividad 1',
+          filename: 'U4Act1.pdf',
+          isDownload: true
+        },
+        { 
+          name: 'Actividad 2',
+          filename: 'U4Act2.pdf',
+          isDownload: true
+        }
+      ]
+    }
   ];
 
   const proyectos = [
@@ -86,16 +165,34 @@ const Sidebar = ({ isOpen }) => {
     { full: "Natare", short: "NT" }
   ];
 
-  const renderSubmenuButton = (text, shortText, index) => (
-    <button
-      key={index}
-      className={`w-full text-left px-3 py-2 text-sm text-blue-300 hover:text-blue-200 hover:bg-blue-500/10 rounded transition-colors ${
-        !isOpen ? 'flex justify-center' : ''
-      }`}
-    >
-      {isOpen ? text : shortText}
-    </button>
-  );
+  const renderSubmenuButton = (item, index) => {
+    if (item.isDownload) {
+      return (
+        <a
+          key={index}
+          href={`/downloads/${item.filename}`}
+          download
+          className={`w-full text-left px-3 py-2 text-sm text-blue-300/70 hover:text-blue-200 hover:bg-blue-500/10 rounded transition-colors flex items-center ${
+            !isOpen ? 'justify-center' : ''
+          }`}
+        >
+          <ArrowDownTrayIcon className="w-4 h-4 mr-2" />
+          {item.name}
+        </a>
+      );
+    }
+
+    return (
+      <button
+        key={index}
+        className={`w-full text-left px-3 py-2 text-sm text-blue-300/70 hover:text-blue-200 hover:bg-blue-500/10 rounded transition-colors ${
+          !isOpen ? 'flex justify-center' : ''
+        }`}
+      >
+        {isOpen ? item.full || item : item.short || item.substring(0, 2)}
+      </button>
+    );
+  };
 
   const renderProyectoSubmenu = (proyecto, index) => (
     <div key={index} className="space-y-1">
@@ -121,6 +218,37 @@ const Sidebar = ({ isOpen }) => {
     </div>
   );
 
+  const renderUnidadButton = (unidad, index) => (
+    <div key={index} className="space-y-1">
+      <button
+        onClick={() => toggleMenu(`unidad${index + 1}`)}
+        className={`w-full text-left px-3 py-2 text-sm text-blue-300 hover:text-blue-200 hover:bg-blue-500/10 rounded transition-colors flex items-center ${
+          !isOpen ? 'justify-center' : ''
+        }`}
+      >
+        {isOpen ? (
+          <>
+            {unidad.full}
+            <ChevronDownIcon
+              className={`w-4 h-4 ml-auto transform transition-transform ${
+                openMenus[`unidad${index + 1}`] ? 'rotate-180' : ''
+              }`}
+            />
+          </>
+        ) : (
+          unidad.short
+        )}
+      </button>
+      {isOpen && openMenus[`unidad${index + 1}`] && unidad.submenu && (
+        <div className="ml-4 space-y-1">
+          {unidad.submenu.map((subitem, subIndex) => 
+            renderSubmenuButton(subitem, `${index}-${subIndex}`)
+          )}
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <aside className={`fixed top-0 left-0 h-screen bg-gray-800 dark:bg-gray-950 transition-all duration-300 pt-14 flex flex-col ${
       isOpen ? 'w-64' : 'w-16'
@@ -134,8 +262,12 @@ const Sidebar = ({ isOpen }) => {
           isSubmenuOpen={openMenus.actividades}
           onClick={() => toggleMenu('actividades')}
         >
-          {unidades.map((unidad, index) => 
-            renderSubmenuButton(unidad.full, unidad.short, index)
+          {isOpen && openMenus.actividades && (
+            <div className="space-y-1">
+              {unidades.map((unidad, index) => 
+                renderUnidadButton(unidad, index)
+              )}
+            </div>
           )}
         </MenuItem>
 
@@ -161,7 +293,7 @@ const Sidebar = ({ isOpen }) => {
           onClick={() => toggleMenu('documentacion')}
         >
           {documentacion.map((doc, index) => 
-            renderSubmenuButton(doc.full, doc.short, index)
+            renderSubmenuButton(doc, index)
           )}
         </MenuItem>
 
@@ -174,7 +306,7 @@ const Sidebar = ({ isOpen }) => {
           onClick={() => toggleMenu('github')}
         >
           {github.map((repo, index) => 
-            renderSubmenuButton(repo.full, repo.short, index)
+            renderSubmenuButton(repo, index)
           )}
         </MenuItem>
       </nav>
