@@ -34,7 +34,7 @@ const MenuItem = ({ icon: Icon, text, isOpen, hasSubmenu, isSubmenuOpen, onClick
         >
           <Icon className={`w-6 h-6 ${isActive ? 'text-blue-400' : 'text-gray-400'}`} />
           {isOpen && (
-            <span className={`ml-3 ${isActive ? 'text-blue-400' : 'text-gray-300'}`}>
+            <span className={`ml-3 text-xs sm:text-sm md:text-base ${isActive ? 'text-blue-400' : 'text-gray-300'}`}>
               {text}
             </span>
           )}
@@ -91,7 +91,6 @@ const Sidebar = ({ isOpen }) => {
       nombre: 'Unidad 1',
       ruta: '/actividades-realizadas/unidad1',
       actividades: [
-        { nombre: 'Actividad 1', archivo: 'U1Act1.pdf' },
         { nombre: 'Actividad 2', archivo: 'U1Act2.pdf' },
         { nombre: 'Actividad Integradora', archivo: 'U1ActInt.pdf' }
       ]
@@ -111,6 +110,7 @@ const Sidebar = ({ isOpen }) => {
       nombre: 'Unidad 3',
       ruta: '/actividades-realizadas/unidad3',
       actividades: [
+        { nombre: 'Actividad Preliminar', archivo: 'U3ActPreliminar.pdf' },
         { nombre: 'Actividad 1', archivo: 'U3Act1.pdf' },
         { nombre: 'Actividad 2', archivo: 'U3Act2.pdf' },
         { nombre: 'Actividad 3', archivo: 'U3Act3.pdf' },
@@ -148,7 +148,7 @@ const Sidebar = ({ isOpen }) => {
               key={index}
               href={`/downloads/${actividad.archivo}`}
               download
-              className="block py-1 px-3 text-sm text-blue-300/70 hover:text-blue-200 hover:bg-blue-500/10 rounded transition-colors flex items-center"
+              className="block py-1 px-3 text-xs sm:text-sm md:text-base text-blue-300/70 hover:text-blue-200 hover:bg-blue-500/10 rounded transition-colors flex items-center"
             >
               <ArrowDownTrayIcon className="w-4 h-4 mr-2" />
               {actividad.nombre}
@@ -206,7 +206,7 @@ const Sidebar = ({ isOpen }) => {
             <Link
               key={index}
               to={item.ruta}
-              className="block py-1 px-3 text-sm text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded transition-colors"
+              className="block py-1 px-3 text-xs sm:text-sm md:text-base text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded transition-colors"
             >
               {item.nombre}
             </Link>
@@ -231,7 +231,7 @@ const Sidebar = ({ isOpen }) => {
     <aside className={`fixed top-0 left-0 h-screen bg-gray-800 dark:bg-gray-950 transition-all duration-300 pt-14 flex flex-col ${
       isOpen ? 'w-64' : 'w-16'
     }`}>
-      <nav className="flex-1 space-y-1 px-2">
+      <nav className="flex-1 space-y-1 px-2 overflow-y-auto">
         <MenuItem 
           icon={HomeIcon}
           text="Inicio"
@@ -288,7 +288,7 @@ const Sidebar = ({ isOpen }) => {
                     key={index}
                     href={`/downloads/${item.archivo}`}
                     download
-                    className="block py-2 text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded text-sm flex items-center"
+                    className="block py-2 text-xs sm:text-sm md:text-base text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded text-sm flex items-center"
                   >
                     <ArrowDownTrayIcon className="w-4 h-4 mr-2" />
                     {item.nombre}
@@ -299,7 +299,7 @@ const Sidebar = ({ isOpen }) => {
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block py-2 text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded text-sm"
+                    className="block py-2 text-xs sm:text-sm md:text-base text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded text-sm"
                   >
                     {item.nombre}
                   </a>
@@ -325,7 +325,7 @@ const Sidebar = ({ isOpen }) => {
                   href={item.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block py-2 text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded text-sm"
+                  className="block py-2 text-xs sm:text-sm md:text-base text-gray-300 hover:text-gray-200 hover:bg-gray-800 rounded text-sm"
                 >
                   {item.nombre}
                 </a>
@@ -339,7 +339,7 @@ const Sidebar = ({ isOpen }) => {
           <AcademicCapIcon className="w-8 h-8 text-gray-400" />
           {isOpen && (
             <div className="ml-3">
-              <p className="text-sm font-medium text-gray-300">Desarrollo de Sistemas Web</p>
+              <p className="text-xs sm:text-sm md:text-base font-medium text-gray-300">Desarrollo de Sistemas Web</p>
               <p className="text-xs text-gray-500">Agosto - Diciembre 2024</p>
             </div>
           )}
